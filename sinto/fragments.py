@@ -163,7 +163,8 @@ def getFragments(
     min_distance=10,
     chunksize=500000,
     shifts=[4, -5],
-    collapse_within=False
+    collapse_within=False,
+    temp_dir=None
 ):
     """Extract ATAC fragments from BAM file
 
@@ -203,10 +204,12 @@ def getFragments(
         Only collapse fragments containing the same start and end coordinate within the
         same cell barcode. Setting to True will only collapse duplicates if the cell barcode
         is the same (allows same fragment coordinates with different cell barcode)
+    temp_dir : str
+        Directory to write temporary files to. Default is the default system temp directory.
     """
     fragment_dict = dict()
     inputBam = pysam.AlignmentFile(bam, "rb")
-    outfile = tempfile.NamedTemporaryFile(delete=False)
+    outfile = tempfile.NamedTemporaryFile(delete=False, dir=temp_dir)
     outname = outfile.name
     x = 0
     if readname_barcode is not None:
@@ -452,7 +455,8 @@ def fragments(
     min_distance=10,
     chunksize=500000,
     shifts=[4, -5],
-    collapse_within=False
+    collapse_within=False,
+    temp_dir=None,
 ):
     """Create ATAC fragment file from BAM file
 
@@ -501,6 +505,8 @@ def fragments(
         Only collapse fragments containing the same start and end coordinate within the
         same cell barcode. Setting to True will only collapse duplicates if the cell barcode
         is the same (allows same fragment coordinates with different cell barcode)
+    temp_dir : str
+        Directory to write temporary files to. Default is the default system temp directory.
     """
     nproc = int(nproc)
     chrom = utils.get_chromosomes(bam, keep_contigs=chromosomes)
@@ -519,7 +525,8 @@ def fragments(
                 min_distance=min_distance,
                 chunksize=chunksize,
                 shifts=shifts,
-                collapse_within=collapse_within
+                collapse_within=collapse_within,
+                temp_dir=temp_dir
             ),
             list(chrom.items()),
         )

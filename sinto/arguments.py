@@ -353,6 +353,16 @@ parser_fragments.add_argument(
     action="store_true",
     default=False,
 )
+parser_fragments.add_argument(
+    "--temp_dir",
+    help="""
+    The path to a directory where temporary files will be written. If not specified,
+    the default system temporary directory will be used.
+    """,
+    required=False,
+    default=None,
+)
+
 parser_fragments.set_defaults(func=cli.run_fragments)
 
 # blocks
